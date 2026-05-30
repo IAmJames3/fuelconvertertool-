@@ -54,6 +54,11 @@ const [fuelAmount, setFuelAmount] = useState(savedForm.fuelAmount || 0);
 const [distanceUnit, setDistanceUnit] = useState(
   savedForm.distanceUnit || "miles"
 );
+
+const [currency, setCurrency] = useState(
+  savedForm.currency || "USD"
+);
+  
 const [fuelUnit, setFuelUnit] = useState(
   savedForm.fuelUnit || "gallons"
 );
