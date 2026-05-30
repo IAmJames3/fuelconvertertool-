@@ -259,12 +259,8 @@ useEffect(() => {
 <section className="card exchangeCard">
   <h2>Exchange Rates</h2>
 
-  <p className="exchangeRate">
-    USD → CAD: {formatNumber(1 / exchangeRatesToUSD.CAD, 4)}
-  </p>
-
-  <p className="exchangeRate">
-    USD → MXN: {formatNumber(1 / exchangeRatesToUSD.MXN, 4)}
+  <p className="exchangeNote">
+    Live exchange rates are used for USD, CAD, and MXN conversions.
   </p>
 
   <p className="exchangeNote">
