@@ -203,8 +203,15 @@ export default function App() {
         <p className="exchangeNote">
           Estimated exchange rates for testing. Live rates can be added later.
         </p>
+     
       </section>
-
+<section className="card adCard">
+  <h2>Advertisement</h2>
+  <p className="exchangeNote">
+    Future ad placement. This space is reserved for Google AdSense.
+  </p>
+</section>
+  
       <section className="card resultsCard">
         <h2>Converted Results</h2>
 
