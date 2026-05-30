@@ -168,8 +168,7 @@ useEffect(() => {
       <section className="hero">
         <h1>Fuel Converter Tool</h1>
         <p>
-          Convert fuel prices, fuel amounts, and odometer readings across the
-          United States, Canada, and Mexico.
+Convert fuel purchases between the United States, Canada, and Mexico into the units and currency used by your preferred fuel-tracking app.
         </p>
         <button
           className="primaryButton"
