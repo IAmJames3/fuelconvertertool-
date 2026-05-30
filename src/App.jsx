@@ -97,7 +97,7 @@ useEffect(() => {
   async function fetchExchangeRates() {
     try {
       const response = await fetch(
-        "https://api.frankfurter.app/latest?from=USD&to=CAD,MXN"
+        "https://api.frankfurter.dev/v1/latest?base=USD&symbols=CAD,MXN"
       );
 
       if (!response.ok) {
