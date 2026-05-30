@@ -248,12 +248,28 @@ export default function App() {
       </section>
 
       <section className="seoText">
-        <h2>Cross-border fuel conversion made simple</h2>
-        <p>
-          This tool helps drivers compare fuel prices across miles, kilometers,
-          gallons, liters, USD, CAD, and MXN.
-        </p>
-      </section>
+  <h2>Cross-border fuel conversion made simple</h2>
+  <p>
+    Fuel prices can be confusing when you cross between the United States,
+    Canada, and Mexico. This tool helps convert miles to kilometers, kilometers
+    to miles, gallons to liters, liters to gallons, and fuel prices between USD,
+    CAD, and MXN.
+  </p>
+
+  <h3>Why fuel prices look different by country</h3>
+  <p>
+    U.S. fuel prices are usually shown per gallon, while Canadian and Mexican
+    fuel prices are usually shown per liter. That makes it hard to quickly know
+    whether a posted fuel price is cheaper or more expensive than what you are
+    used to at home.
+  </p>
+
+  <h3>What this calculator helps compare</h3>
+  <p>
+    Use this fuel converter to compare price per gallon, price per liter, total
+    fill-up cost, fuel amount, and odometer readings when driving across borders.
+  </p>
+</section>
     </main>
   );
 }
