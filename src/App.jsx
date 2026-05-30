@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const presets = {
   US: { distanceUnit: "miles", fuelUnit: "gallons", currency: "USD" },
@@ -37,17 +37,43 @@ function formatCurrency(value, currency) {
 }
 
 export default function App() {
-  const [country, setCountry] = useState("US");
-  const [odometer, setOdometer] = useState(0);
-  const [pricePerUnit, setPricePerUnit] = useState(0);
-  const [fuelAmount, setFuelAmount] = useState(0);
-  const [distanceUnit, setDistanceUnit] = useState("miles");
-  const [fuelUnit, setFuelUnit] = useState("gallons");
-  const [currency, setCurrency] = useState("USD");
-  const [lastSaved, setLastSaved] = useState(() => {
-    const saved = localStorage.getItem("fuelConverterLastEntry");
-    return saved ? JSON.parse(saved) : null;
-  });
+const savedForm =
+  JSON.parse(localStorage.getItem("fuelConverterForm")) || {};
+
+const [country, setCountry] = useState(savedForm.country || "US");
+const [odometer, setOdometer] = useState(savedForm.odometer || 0);
+const [pricePerUnit, setPricePerUnit] = useState(savedForm.pricePerUnit || 0);
+const [fuelAmount, setFuelAmount] = useState(savedForm.fuelAmount || 0);
+const [distanceUnit, setDistanceUnit] = useState(
+  savedForm.distanceUnit || "miles"
+);
+const [fuelUnit, setFuelUnit] = useState(
+  savedForm.fuelUnit || "gallons"
+);
+const [currency, setCurrency] = useState(
+  savedForm.currency || "USD"
+);
+useEffect(() => {
+  const formData = {
+    country,
+    odometer,
+    pricePerUnit,
+    fuelAmount,
+    distanceUnit,
+    fuelUnit,
+    currency,
+  };
+
+  localStorage.setItem("fuelConverterForm", JSON.stringify(formData));
+}, [
+  country,
+  odometer,
+  pricePerUnit,
+  fuelAmount,
+  distanceUnit,
+  fuelUnit,
+  currency,
+]);
 
   function applyPreset(selectedCountry) {
     setCountry(selectedCountry);
@@ -80,24 +106,6 @@ export default function App() {
       usdTotal,
     };
   }, [odometer, pricePerUnit, fuelAmount, distanceUnit, fuelUnit, currency]);
-
-  function saveEntry() {
-    const entry = {
-      country,
-      odometer,
-      distanceUnit,
-      pricePerUnit,
-      fuelAmount,
-      fuelUnit,
-      currency,
-      totalCost: results.totalCost,
-      usdTotal: results.usdTotal,
-      savedAt: new Date().toLocaleString(),
-    };
-
-    localStorage.setItem("fuelConverterLastEntry", JSON.stringify(entry));
-    setLastSaved(entry);
-  }
 
   const exchangeRateText =
     currency === "USD"
@@ -232,28 +240,27 @@ export default function App() {
 />
       </section>
 
-      <section className="card saveCard">
-        <h2>Save this fill-up</h2>
-        <button className="primaryButton" onClick={saveEntry}>
-          Save Entry
-        </button>
+<section className="card saveCard">
+  <h2>Last Entry Saved Automatically</h2>
 
-        {lastSaved ? (
-          <div className="lastSaved">
-            <p><strong>Last saved fill-up</strong></p>
-<p className="exchangeNote">Stored locally on this device and browser.</p>
-            <p>{lastSaved.savedAt}</p>
-            <p>
-              {formatNumber(Number(lastSaved.fuelAmount), 2)} {lastSaved.fuelUnit} ·{" "}
-              {formatCurrency(Number(lastSaved.totalCost), lastSaved.currency)}
-            </p>
-          </div>
-        ) : (
-          <p className="exchangeNote">
-  No saved fill-up yet. Saved entries are stored only on this device and browser.
-</p>
-        )}
-      </section>
+  <p className="exchangeNote">
+    Your latest entry is automatically stored on this device and browser.
+  </p>
+
+  <div className="lastSaved">
+    <p>
+      <strong>Current Entry</strong>
+    </p>
+
+    <p>
+      {formatNumber(Number(fuelAmount), 2)} {fuelUnit}
+    </p>
+
+    <p>
+      {formatCurrency(results.totalCost, currency)}
+    </p>
+  </div>
+</section>
 
       <section className="seoText">
   <h2>Cross-border fuel conversion made simple</h2>
