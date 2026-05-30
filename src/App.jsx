@@ -290,10 +290,26 @@ value={`${formatCurrency(Number(pricePerUnit), currency)} per ${fuelUnit === "li
 }
 
 function Result({ label, value }) {
+  const displayValue =
+    typeof value === "string" && value.includes("=")
+      ? value.split("=")
+      : null;
+
   return (
     <div className="result">
       <span>{label}</span>
-      <strong>{value}</strong>
+
+      {displayValue ? (
+        <strong>
+          {displayValue[0].trim()}
+          <br />
+          =
+          <br />
+          {displayValue[1].trim()}
+        </strong>
+      ) : (
+        <strong>{value}</strong>
+      )}
     </div>
   );
 }
