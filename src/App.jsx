@@ -225,7 +225,8 @@ export default function App() {
 
         {lastSaved ? (
           <div className="lastSaved">
-            <p><strong>Last saved</strong></p>
+            <p><strong>Last saved fill-up</strong></p>
+<p className="exchangeNote">Stored locally on this device and browser.</p>
             <p>{lastSaved.savedAt}</p>
             <p>
               {formatNumber(Number(lastSaved.fuelAmount), 2)} {lastSaved.fuelUnit} ·{" "}
@@ -233,7 +234,9 @@ export default function App() {
             </p>
           </div>
         ) : (
-          <p className="exchangeNote">No saved fill-up yet.</p>
+          <p className="exchangeNote">
+  No saved fill-up yet. Saved entries are stored only on this device and browser.
+</p>
         )}
       </section>
 
