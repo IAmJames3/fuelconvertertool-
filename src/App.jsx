@@ -62,6 +62,7 @@ const [currency, setCurrency] = useState(
 const [fuelUnit, setFuelUnit] = useState(
   savedForm.fuelUnit || "gallons"
 );
+  
 const [exchangeRatesToUSD, setExchangeRatesToUSD] = useState(
   fallbackExchangeRatesToUSD
 );
