@@ -77,6 +77,11 @@ export default function App() {
     };
   }, [odometer, pricePerUnit, fuelAmount, distanceUnit, fuelUnit, currency]);
 
+  const exchangeRateText =
+    currency === "USD"
+      ? "USD → USD: 1.00"
+      : `${currency} → USD: ${exchangeRatesToUSD[currency]}`;
+
   return (
     <main className="page">
       <section className="hero">
@@ -167,6 +172,16 @@ export default function App() {
             </select>
           </div>
           <small>What the pump says after fill up</small>
+        </div>
+      </section>
+
+      <section className="card exchangeCard">
+        <div>
+          <h2>Exchange Rate</h2>
+          <p className="exchangeRate">{exchangeRateText}</p>
+          <p className="exchangeNote">
+            Estimated exchange rates for testing. Live rates can be added later.
+          </p>
         </div>
       </section>
 
