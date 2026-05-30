@@ -216,12 +216,20 @@ export default function App() {
         <h2>Converted Results</h2>
 
         <Result label="Odometer" value={`${formatNumber(results.miles, 0)} miles`} />
-        <Result label="Fuel Price" value={`${formatCurrency(results.usdPricePerGallon, "USD")} / gallon`} />
-        <Result label="Fuel Amount" value={`${formatNumber(results.gallons)} gallons`} />
         <Result
-          label="Total Fuel Cost"
-          value={`${formatCurrency(results.totalCost, currency)} / ${formatCurrency(results.usdTotal, "USD")}`}
-        />
+  label="Fuel Price Comparison"
+  value={`${formatCurrency(Number(pricePerUnit), currency)} per ${fuelUnit === "liters" ? "liter" : "gallon"} • ${formatCurrency(results.usdPricePerGallon, "USD")} per gallon`}
+/>
+
+<Result
+  label="Fuel Purchased"
+  value={`${formatNumber(Number(fuelAmount), 2)} ${fuelUnit} • ${formatNumber(results.gallons, 2)} gallons`}
+/>
+
+<Result
+  label="Total Fuel Cost"
+  value={`${formatCurrency(results.totalCost, currency)} • ${formatCurrency(results.usdTotal, "USD")}`}
+/>
       </section>
 
       <section className="card saveCard">
