@@ -30,12 +30,22 @@ function formatNumber(value, decimals = 2) {
 
 function formatCurrency(value, currency) {
   if (!Number.isFinite(value)) value = 0;
-  return new Intl.NumberFormat("en-US", {
+
+  const formatted = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
   }).format(value);
-}
 
+  if (currency === "USD") {
+    return formatted.replace("$", "US$");
+  }
+
+  if (currency === "MXN") {
+    return formatted.replace("$", "MX$");
+  }
+
+  return formatted;
+}
 export default function App() {
 const savedForm =
   JSON.parse(localStorage.getItem("fuelConverterForm")) || {};
