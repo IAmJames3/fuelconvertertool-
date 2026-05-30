@@ -43,8 +43,6 @@ function formatCurrency(value, currency) {
   return formatted;
 }
 
-  return formatted;
-}
 export default function App() {
 const savedForm =
   JSON.parse(localStorage.getItem("fuelConverterForm")) || {};
