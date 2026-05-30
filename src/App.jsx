@@ -48,6 +48,9 @@ const savedForm =
   JSON.parse(localStorage.getItem("fuelConverterForm")) || {};
 
 const [country, setCountry] = useState(savedForm.country || "US");
+const [trackingCountry, setTrackingCountry] = useState(
+  savedForm.trackingCountry || "US"
+);
 const [odometer, setOdometer] = useState(savedForm.odometer || 0);
 const [pricePerUnit, setPricePerUnit] = useState(savedForm.pricePerUnit || 0);
 const [fuelAmount, setFuelAmount] = useState(savedForm.fuelAmount || 0);
@@ -72,19 +75,21 @@ const [exchangeRateSource, setExchangeRateSource] = useState(
   "Frankfurter Exchange Rates"
 );
 useEffect(() => {
-  const formData = {
-    country,
-    odometer,
-    pricePerUnit,
-    fuelAmount,
-    distanceUnit,
-    fuelUnit,
-    currency,
-  };
+const formData = {
+  country,
+  trackingCountry,
+  odometer,
+  pricePerUnit,
+  fuelAmount,
+  distanceUnit,
+  fuelUnit,
+  currency,
+};
 
   localStorage.setItem("fuelConverterForm", JSON.stringify(formData));
 }, [
   country,
+  trackingCountry,
   odometer,
   pricePerUnit,
   fuelAmount,
@@ -133,30 +138,59 @@ useEffect(() => {
     setCurrency(presets[selectedCountry].currency);
   }
 
-  const results = useMemo(() => {
-    const odometerValue = Number(odometer) || 0;
-    const priceValue = Number(pricePerUnit) || 0;
-    const fuelValue = Number(fuelAmount) || 0;
+const results = useMemo(() => {
+  const odometerValue = Number(odometer) || 0;
+  const priceValue = Number(pricePerUnit) || 0;
+  const fuelValue = Number(fuelAmount) || 0;
 
-    const miles = toMiles(odometerValue, distanceUnit);
-    const gallons = toGallons(fuelValue, fuelUnit);
-    const totalCost = priceValue * fuelValue;
+  const totalCost = priceValue * fuelValue;
 
-    const usdPricePerGallon =
-      fuelUnit === "liters"
-        ? priceValue * 3.78541 * exchangeRatesToUSD[currency]
-        : priceValue * exchangeRatesToUSD[currency];
+  const outputPreset = presets[trackingCountry];
+  const outputDistanceUnit = outputPreset.distanceUnit;
+  const outputFuelUnit = outputPreset.fuelUnit;
+  const outputCurrency = outputPreset.currency;
 
-    const usdTotal = totalCost * exchangeRatesToUSD[currency];
+  const inputMiles = toMiles(odometerValue, distanceUnit);
+  const outputOdometer =
+    outputDistanceUnit === "miles" ? inputMiles : inputMiles * 1.60934;
 
-    return {
-      miles,
-      gallons,
-      totalCost,
-      usdPricePerGallon,
-      usdTotal,
-    };
-  }, [odometer, pricePerUnit, fuelAmount, distanceUnit, fuelUnit, currency]);
+  const inputGallons = toGallons(fuelValue, fuelUnit);
+  const outputFuelAmount =
+    outputFuelUnit === "gallons" ? inputGallons : inputGallons * 3.78541;
+
+  const totalCostUSD = totalCost * exchangeRatesToUSD[currency];
+  const outputTotalCost = totalCostUSD / exchangeRatesToUSD[outputCurrency];
+
+  const inputPricePerGallonUSD =
+    fuelUnit === "liters"
+      ? priceValue * 3.78541 * exchangeRatesToUSD[currency]
+      : priceValue * exchangeRatesToUSD[currency];
+
+  const outputPricePerUnit =
+    outputFuelUnit === "gallons"
+      ? inputPricePerGallonUSD / exchangeRatesToUSD[outputCurrency]
+      : inputPricePerGallonUSD / 3.78541 / exchangeRatesToUSD[outputCurrency];
+
+  return {
+    totalCost,
+    outputDistanceUnit,
+    outputFuelUnit,
+    outputCurrency,
+    outputOdometer,
+    outputFuelAmount,
+    outputPricePerUnit,
+    outputTotalCost,
+  };
+}, [
+  odometer,
+  pricePerUnit,
+  fuelAmount,
+  distanceUnit,
+  fuelUnit,
+  currency,
+  trackingCountry,
+  exchangeRatesToUSD,
+]);
 
   const exchangeRateText =
     currency === "USD"
@@ -185,18 +219,35 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
       <section id="converter" className="card">
         <h2>Fuel Converter</h2>
 
-        <label>Where are you filling up?</label>
-        <div className="buttonGrid">
-          {["US", "Canada", "Mexico"].map((item) => (
-            <button
-              key={item}
-              className={country === item ? "activeButton" : "secondaryButton"}
-              onClick={() => applyPreset(item)}
-            >
-              {item}
-            </button>
-          ))}
-        </div>
+<label>Where are you filling up?</label>
+<div className="buttonGrid">
+  {["US", "Canada", "Mexico"].map((item) => (
+    <button
+      key={item}
+      className={country === item ? "activeButton" : "secondaryButton"}
+      onClick={() => applyPreset(item)}
+    >
+      {item}
+    </button>
+  ))}
+</div>
+
+<label style={{ marginTop: "16px", display: "block" }}>
+  My Tracking App Uses
+</label>
+<div className="buttonGrid">
+  {["US", "Canada", "Mexico"].map((item) => (
+    <button
+      key={`tracking-${item}`}
+      className={
+        trackingCountry === item ? "activeButton" : "secondaryButton"
+      }
+      onClick={() => setTrackingCountry(item)}
+    >
+      {item}
+    </button>
+  ))}
+</div>
 
         <div className="field">
           <label>Odometer</label>
@@ -281,25 +332,39 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
   </p>
 </section>
   
-      <section className="card resultsCard">
-        <h2>Converted Results</h2>
+<section className="card resultsCard">
+  <h2>Converted Results</h2>
 
-        <Result label="Odometer" value={`${formatNumber(results.miles, 0)} miles`} />
-        <Result
-  label="Fuel Price Comparison"
-value={`${formatCurrency(Number(pricePerUnit), currency)} per ${fuelUnit === "liters" ? "liter" : "gallon"} = ${formatCurrency(results.usdPricePerGallon, "USD")} per gallon`}
-/>
+  <Result
+    label="Odometer"
+    value={`${formatNumber(results.outputOdometer, 0)} ${results.outputDistanceUnit}`}
+  />
 
-<Result
-  label="Fuel Purchased"
-  value={`${formatNumber(Number(fuelAmount), 2)} ${fuelUnit} = ${formatNumber(results.gallons, 2)} gallons`}
-/>
+  <Result
+    label="Fuel Price Comparison"
+    value={`${formatCurrency(Number(pricePerUnit), currency)} per ${
+      fuelUnit === "liters" ? "liter" : "gallon"
+    } = ${formatCurrency(results.outputPricePerUnit, results.outputCurrency)} per ${
+      results.outputFuelUnit === "liters" ? "liter" : "gallon"
+    }`}
+  />
 
-<Result
-  label="Total Fuel Cost"
-  value={`${formatCurrency(results.totalCost, currency)} = ${formatCurrency(results.usdTotal, "USD")}`}
-/>
-      </section>
+  <Result
+    label="Fuel Purchased"
+    value={`${formatNumber(Number(fuelAmount), 2)} ${fuelUnit} = ${formatNumber(
+      results.outputFuelAmount,
+      2
+    )} ${results.outputFuelUnit}`}
+  />
+
+  <Result
+    label="Total Fuel Cost"
+    value={`${formatCurrency(results.totalCost, currency)} = ${formatCurrency(
+      results.outputTotalCost,
+      results.outputCurrency
+    )}`}
+  />
+</section>
 
 <section className="card saveCard">
   <h2>Last Entry Saved Automatically</h2>
