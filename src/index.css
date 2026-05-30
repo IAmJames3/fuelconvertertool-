@@ -168,3 +168,13 @@ small {
     font-size: 44px;
   }
 }
+
+.adCard {
+  text-align: center;
+  border: 2px dashed #d1d5db;
+  background: #fafafa;
+}
+
+.adCard h2 {
+  margin-bottom: 8px;
+}
