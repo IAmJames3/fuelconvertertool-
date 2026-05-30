@@ -1,82 +1,218 @@
+import { useMemo, useState } from "react";
+
+const presets = {
+  US: { distanceUnit: "miles", fuelUnit: "gallons", currency: "USD" },
+  Canada: { distanceUnit: "km", fuelUnit: "liters", currency: "CAD" },
+  Mexico: { distanceUnit: "km", fuelUnit: "liters", currency: "MXN" },
+};
+
+const exchangeRatesToUSD = {
+  USD: 1,
+  CAD: 0.72,
+  MXN: 0.059,
+};
+
+function toMiles(value, unit) {
+  return unit === "km" ? value * 0.621371 : value;
+}
+
+function toGallons(value, unit) {
+  return unit === "liters" ? value * 0.264172 : value;
+}
+
+function formatNumber(value, decimals = 2) {
+  if (!Number.isFinite(value)) return "0";
+  return value.toLocaleString(undefined, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+}
+
+function formatCurrency(value, currency) {
+  if (!Number.isFinite(value)) value = 0;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+  }).format(value);
+}
+
 export default function App() {
+  const [country, setCountry] = useState("US");
+  const [odometer, setOdometer] = useState(0);
+  const [pricePerUnit, setPricePerUnit] = useState(0);
+  const [fuelAmount, setFuelAmount] = useState(0);
+  const [distanceUnit, setDistanceUnit] = useState("miles");
+  const [fuelUnit, setFuelUnit] = useState("gallons");
+  const [currency, setCurrency] = useState("USD");
+
+  function applyPreset(selectedCountry) {
+    setCountry(selectedCountry);
+    setDistanceUnit(presets[selectedCountry].distanceUnit);
+    setFuelUnit(presets[selectedCountry].fuelUnit);
+    setCurrency(presets[selectedCountry].currency);
+  }
+
+  const results = useMemo(() => {
+    const odometerValue = Number(odometer) || 0;
+    const priceValue = Number(pricePerUnit) || 0;
+    const fuelValue = Number(fuelAmount) || 0;
+
+    const miles = toMiles(odometerValue, distanceUnit);
+    const gallons = toGallons(fuelValue, fuelUnit);
+    const totalCost = priceValue * fuelValue;
+
+    const usdPricePerGallon =
+      fuelUnit === "liters"
+        ? priceValue * 3.78541 * exchangeRatesToUSD[currency]
+        : priceValue * exchangeRatesToUSD[currency];
+
+    const usdTotal = totalCost * exchangeRatesToUSD[currency];
+
+    return {
+      miles,
+      gallons,
+      totalCost,
+      usdPricePerGallon,
+      usdTotal,
+    };
+  }, [odometer, pricePerUnit, fuelAmount, distanceUnit, fuelUnit, currency]);
+
   return (
-    <div
-      style={{
-        fontFamily: "system-ui, sans-serif",
-        background: "#F7F9FB",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          maxWidth: "500px",
-          margin: "0 auto",
-        }}
-      >
-        <h1
-          style={{
-            color: "#2563EB",
-            marginBottom: "10px",
-          }}
-        >
-          Fuel Converter Tool
-        </h1>
-
-        <p style={{ color: "#4B5563" }}>
-          Cross-border fuel conversions for the United States, Canada, and
-          Mexico.
+    <main className="page">
+      <section className="hero">
+        <h1>Fuel Converter Tool</h1>
+        <p>
+          Convert fuel prices, fuel amounts, and odometer readings across the
+          United States, Canada, and Mexico.
         </p>
-
         <button
-          style={{
-            background: "#2563EB",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            padding: "12px 16px",
-            cursor: "pointer",
-            marginTop: "15px",
-          }}
+          className="primaryButton"
+          onClick={() =>
+            document.getElementById("converter").scrollIntoView({
+              behavior: "smooth",
+            })
+          }
         >
           Start Converting
         </button>
+      </section>
 
-        <div
-          style={{
-            background: "white",
-            borderRadius: "12px",
-            padding: "20px",
-            marginTop: "20px",
-            boxShadow: "0 1px 3px rgba(0,0,0,.1)",
-          }}
-        >
-          <h2>Fuel Converter</h2>
+      <section id="converter" className="card">
+        <h2>Fuel Converter</h2>
 
-          <p>Odometer</p>
-          <input
-            type="number"
-            defaultValue="0"
-            style={{ width: "100%", padding: "10px" }}
-          />
+        <label>Where are you filling up?</label>
+        <div className="buttonGrid">
+          {["US", "Canada", "Mexico"].map((item) => (
+            <button
+              key={item}
+              className={country === item ? "activeButton" : "secondaryButton"}
+              onClick={() => applyPreset(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
 
-          <p style={{ marginTop: "15px" }}>Price Per Unit</p>
-          <input
-            type="number"
-            defaultValue="0"
-            style={{ width: "100%", padding: "10px" }}
-          />
+        <div className="field">
+          <label>Odometer</label>
+          <div className="inputRow">
+            <input
+              type="number"
+              value={odometer}
+              onChange={(e) => setOdometer(e.target.value)}
+            />
+            <select
+              value={distanceUnit}
+              onChange={(e) => setDistanceUnit(e.target.value)}
+            >
+              <option value="miles">Miles</option>
+              <option value="km">KM</option>
+            </select>
+          </div>
+        </div>
 
-          <p style={{ marginTop: "15px" }}>Fuel Amount</p>
-          <input
-            type="number"
-            defaultValue="0"
-            style={{ width: "100%", padding: "10px" }}
-          />
+        <div className="field">
+          <label>Price per unit</label>
+          <div className="inputRow">
+            <input
+              type="number"
+              value={pricePerUnit}
+              onChange={(e) => setPricePerUnit(e.target.value)}
+            />
+            <select
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value)}
+            >
+              <option value="USD">USD</option>
+              <option value="CAD">CAD</option>
+              <option value="MXN">MXN</option>
+            </select>
+          </div>
+        </div>
 
+        <div className="field">
+          <label>Fuel amount</label>
+          <div className="inputRow">
+            <input
+              type="number"
+              value={fuelAmount}
+              onChange={(e) => setFuelAmount(e.target.value)}
+            />
+            <select
+              value={fuelUnit}
+              onChange={(e) => setFuelUnit(e.target.value)}
+            >
+              <option value="gallons">Gallons</option>
+              <option value="liters">Liters</option>
+            </select>
+          </div>
           <small>What the pump says after fill up</small>
         </div>
-      </div>
+      </section>
+
+      <section className="card resultsCard">
+        <h2>Converted Results</h2>
+
+        <Result
+          label="Odometer"
+          value={`${formatNumber(results.miles, 0)} miles`}
+        />
+
+        <Result
+          label="Fuel Price"
+          value={`${formatCurrency(results.usdPricePerGallon, "USD")} / gallon`}
+        />
+
+        <Result
+          label="Fuel Amount"
+          value={`${formatNumber(results.gallons)} gallons`}
+        />
+
+        <Result
+          label="Total Fuel Cost"
+          value={`${formatCurrency(results.totalCost, currency)} / ${formatCurrency(
+            results.usdTotal,
+            "USD"
+          )}`}
+        />
+      </section>
+
+      <section className="seoText">
+        <h2>Cross-border fuel conversion made simple</h2>
+        <p>
+          This tool helps drivers compare fuel prices across miles, kilometers,
+          gallons, liters, USD, CAD, and MXN.
+        </p>
+      </section>
+    </main>
+  );
+}
+
+function Result({ label, value }) {
+  return (
+    <div className="result">
+      <span>{label}</span>
+      <strong>{value}</strong>
     </div>
   );
 }
