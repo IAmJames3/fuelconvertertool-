@@ -356,7 +356,89 @@ value={`${formatCurrency(Number(pricePerUnit), currency)} per ${fuelUnit === "li
     helping you spend less time doing math and more time enjoying the journey.
   </p>
 </section>
-    </main>
+
+<section className="seoText">
+  <h2>Frequently Asked Questions</h2>
+
+  <h3>What is Fuel Converter Tool?</h3>
+  <p>
+    Fuel Converter Tool helps drivers convert fuel purchases between the
+    United States, Canada, and Mexico into the units and currency used by
+    their preferred fuel-tracking app. Convert odometer readings, fuel prices,
+    fuel amounts, and currency values so fuel purchases can be recorded
+    accurately and consistently.
+  </p>
+
+  <h3>Why would I need Fuel Converter Tool?</h3>
+  <p>
+    If you purchase fuel in another country, the measurements and currency
+    shown on the pump may not match the format used by your fuel-tracking app.
+    Fuel Converter Tool helps eliminate manual calculations by converting the
+    information into the units and currency you need.
+  </p>
+
+  <h3>Can I use Fuel Converter Tool with Fuelly?</h3>
+  <p>
+    Yes. Fuel Converter Tool can help convert fuel purchases into the format
+    expected by Fuelly. Enter the values exactly as they appear on the pump
+    and dashboard, then use the converted results when recording your fuel
+    purchase.
+  </p>
+
+  <h3>Can I use Fuel Converter Tool with Fuelio, Drivvo, Simply Auto, or other fuel-tracking apps?</h3>
+  <p>
+    Yes. Fuel Converter Tool is designed to work with any fuel-tracking or
+    mileage-tracking app that requires fuel purchases to be entered in a
+    specific unit or currency format.
+  </p>
+
+  <h3>Does Fuel Converter Tool work for cars, trucks, RVs, and motorcycles?</h3>
+  <p>
+    Yes. Fuel Converter Tool can be used with any vehicle where fuel purchases
+    are tracked, including cars, trucks, RVs, motorcycles, vans, and fleet
+    vehicles.
+  </p>
+
+  <h3>Do I need to change my vehicle settings when traveling?</h3>
+  <p>
+    No. Fuel Converter Tool works whether your vehicle displays miles or
+    kilometers and whether fuel is purchased in gallons or liters. You can
+    select the units that match the information you want to record.
+  </p>
+
+  <h3>Can I convert fuel prices between USD, CAD, and MXN?</h3>
+  <p>
+    Yes. Fuel Converter Tool uses live exchange rates when available to
+    convert fuel prices and fuel purchase totals between U.S. Dollars (USD),
+    Canadian Dollars (CAD), and Mexican Pesos (MXN). If live rates are
+    temporarily unavailable, fallback exchange rates may be used to keep
+    conversions available.
+  </p>
+
+  <h3>Does Fuel Converter Tool save my information?</h3>
+  <p>
+    Yes. Fuel Converter Tool automatically saves your most recently selected
+    country, units, currency, and entered values in your browser. This makes
+    it easy to continue where you left off when you return to the site. Fuel
+    Converter Tool does not store a history of fuel purchases or maintain a
+    fuel log.
+  </p>
+
+  <h3>Does Fuel Converter Tool keep a history of my fuel purchases?</h3>
+  <p>
+    No. Fuel Converter Tool is designed to convert fuel purchase information
+    into the format needed for your preferred fuel-tracking app. Fuel purchase
+    history and fuel economy records should be maintained within your
+    fuel-tracking app or record-keeping system.
+  </p>
+
+  <h3>Is Fuel Converter Tool free to use?</h3>
+  <p>
+    Yes. Fuel Converter Tool is free to use.
+  </p>
+</section>
+
+</main>
   );
 }
 
