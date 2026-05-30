@@ -44,6 +44,10 @@ export default function App() {
   const [distanceUnit, setDistanceUnit] = useState("miles");
   const [fuelUnit, setFuelUnit] = useState("gallons");
   const [currency, setCurrency] = useState("USD");
+  const [lastSaved, setLastSaved] = useState(() => {
+    const saved = localStorage.getItem("fuelConverterLastEntry");
+    return saved ? JSON.parse(saved) : null;
+  });
 
   function applyPreset(selectedCountry) {
     setCountry(selectedCountry);
@@ -76,6 +80,24 @@ export default function App() {
       usdTotal,
     };
   }, [odometer, pricePerUnit, fuelAmount, distanceUnit, fuelUnit, currency]);
+
+  function saveEntry() {
+    const entry = {
+      country,
+      odometer,
+      distanceUnit,
+      pricePerUnit,
+      fuelAmount,
+      fuelUnit,
+      currency,
+      totalCost: results.totalCost,
+      usdTotal: results.usdTotal,
+      savedAt: new Date().toLocaleString(),
+    };
+
+    localStorage.setItem("fuelConverterLastEntry", JSON.stringify(entry));
+    setLastSaved(entry);
+  }
 
   const exchangeRateText =
     currency === "USD"
@@ -176,40 +198,43 @@ export default function App() {
       </section>
 
       <section className="card exchangeCard">
-        <div>
-          <h2>Exchange Rate</h2>
-          <p className="exchangeRate">{exchangeRateText}</p>
-          <p className="exchangeNote">
-            Estimated exchange rates for testing. Live rates can be added later.
-          </p>
-        </div>
+        <h2>Exchange Rate</h2>
+        <p className="exchangeRate">{exchangeRateText}</p>
+        <p className="exchangeNote">
+          Estimated exchange rates for testing. Live rates can be added later.
+        </p>
       </section>
 
       <section className="card resultsCard">
         <h2>Converted Results</h2>
 
-        <Result
-          label="Odometer"
-          value={`${formatNumber(results.miles, 0)} miles`}
-        />
-
-        <Result
-          label="Fuel Price"
-          value={`${formatCurrency(results.usdPricePerGallon, "USD")} / gallon`}
-        />
-
-        <Result
-          label="Fuel Amount"
-          value={`${formatNumber(results.gallons)} gallons`}
-        />
-
+        <Result label="Odometer" value={`${formatNumber(results.miles, 0)} miles`} />
+        <Result label="Fuel Price" value={`${formatCurrency(results.usdPricePerGallon, "USD")} / gallon`} />
+        <Result label="Fuel Amount" value={`${formatNumber(results.gallons)} gallons`} />
         <Result
           label="Total Fuel Cost"
-          value={`${formatCurrency(results.totalCost, currency)} / ${formatCurrency(
-            results.usdTotal,
-            "USD"
-          )}`}
+          value={`${formatCurrency(results.totalCost, currency)} / ${formatCurrency(results.usdTotal, "USD")}`}
         />
+      </section>
+
+      <section className="card saveCard">
+        <h2>Save this fill-up</h2>
+        <button className="primaryButton" onClick={saveEntry}>
+          Save Entry
+        </button>
+
+        {lastSaved ? (
+          <div className="lastSaved">
+            <p><strong>Last saved</strong></p>
+            <p>{lastSaved.savedAt}</p>
+            <p>
+              {formatNumber(Number(lastSaved.fuelAmount), 2)} {lastSaved.fuelUnit} ·{" "}
+              {formatCurrency(Number(lastSaved.totalCost), lastSaved.currency)}
+            </p>
+          </div>
+        ) : (
+          <p className="exchangeNote">No saved fill-up yet.</p>
+        )}
       </section>
 
       <section className="seoText">
