@@ -36,13 +36,12 @@ function formatCurrency(value, currency) {
     currency,
   }).format(value);
 
-  if (currency === "USD") {
+  if (currency === "USD" && !formatted.includes("US$")) {
     return formatted.replace("$", "US$");
   }
 
-  if (currency === "MXN") {
-    return formatted.replace("$", "MX$");
-  }
+  return formatted;
+}
 
   return formatted;
 }
