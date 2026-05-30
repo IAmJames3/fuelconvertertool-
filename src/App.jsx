@@ -323,27 +323,37 @@ value={`${formatCurrency(Number(pricePerUnit), currency)} per ${fuelUnit === "li
   </div>
 </section>
 
-      <section className="seoText">
-  <h2>Cross-border fuel conversion made simple</h2>
+<section className="seoText">
+  <h2>Cross-border fuel purchases, converted for your fuel-tracking app</h2>
+
   <p>
-    Fuel prices can be confusing when you cross between the United States,
-    Canada, and Mexico. This tool helps convert miles to kilometers, kilometers
-    to miles, gallons to liters, liters to gallons, and fuel prices between USD,
-    CAD, and MXN.
+    Tracking fuel purchases across the United States, Canada, and Mexico can be
+    frustrating when the measurements and currency on the pump don't match the
+    format used by your fuel-tracking app.
   </p>
 
-  <h3>Why fuel prices look different by country</h3>
   <p>
-    U.S. fuel prices are usually shown per gallon, while Canadian and Mexican
-    fuel prices are usually shown per liter. That makes it hard to quickly know
-    whether a posted fuel price is cheaper or more expensive than what you are
-    used to at home.
+    If you track your fuel purchases, a fill-up in another country can quickly
+    turn into a series of conversions before the information can be entered into
+    your preferred fuel-tracking app accurately and consistently.
   </p>
 
-  <h3>What this calculator helps compare</h3>
   <p>
-    Use this fuel converter to compare price per gallon, price per liter, total
-    fill-up cost, fuel amount, and odometer readings when driving across borders.
+    Fuel Converter Tool helps simplify that process. Enter your odometer
+    reading, fuel price, and fuel amount exactly as they appear, then instantly
+    convert the results into the units and currency you need.
+  </p>
+
+  <p>
+    Whether your vehicle displays miles or kilometers, gallons or liters, Fuel
+    Converter Tool makes it easy to prepare fuel purchase information for your
+    preferred fuel-tracking app.
+  </p>
+
+  <p>
+    Designed for drivers who care about accurate fuel records, Fuel Converter
+    Tool supports conversions between the United States, Canada, and Mexico,
+    helping you spend less time doing math and more time enjoying the journey.
   </p>
 </section>
     </main>
