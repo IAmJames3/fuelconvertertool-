@@ -6,7 +6,7 @@ const presets = {
   Mexico: { distanceUnit: "km", fuelUnit: "liters", currency: "MXN" },
 };
 
-const exchangeRatesToUSD = {
+const fallbackExchangeRatesToUSD = {
   USD: 1,
   CAD: 0.72,
   MXN: 0.059,
@@ -57,8 +57,13 @@ const [distanceUnit, setDistanceUnit] = useState(
 const [fuelUnit, setFuelUnit] = useState(
   savedForm.fuelUnit || "gallons"
 );
-const [currency, setCurrency] = useState(
-  savedForm.currency || "USD"
+const [exchangeRatesToUSD, setExchangeRatesToUSD] = useState(
+  fallbackExchangeRatesToUSD
+);
+const [exchangeRateDate, setExchangeRateDate] = useState("Checking...");
+const [exchangeRateCheckedAt, setExchangeRateCheckedAt] = useState("");
+const [exchangeRateSource, setExchangeRateSource] = useState(
+  "Frankfurter Exchange Rates"
 );
 useEffect(() => {
   const formData = {
@@ -81,6 +86,39 @@ useEffect(() => {
   fuelUnit,
   currency,
 ]);
+
+useEffect(() => {
+  async function fetchExchangeRates() {
+    try {
+      const response = await fetch(
+        "https://api.frankfurter.app/latest?from=USD&to=CAD,MXN"
+      );
+
+      if (!response.ok) {
+        throw new Error("Exchange rate request failed");
+      }
+
+      const data = await response.json();
+
+      setExchangeRatesToUSD({
+        USD: 1,
+        CAD: 1 / data.rates.CAD,
+        MXN: 1 / data.rates.MXN,
+      });
+
+      setExchangeRateDate(data.date);
+      setExchangeRateCheckedAt(new Date().toLocaleString());
+      setExchangeRateSource("Frankfurter Exchange Rates");
+    } catch (error) {
+      setExchangeRatesToUSD(fallbackExchangeRatesToUSD);
+      setExchangeRateDate("Using fallback rates");
+      setExchangeRateCheckedAt(new Date().toLocaleString());
+      setExchangeRateSource("Fallback estimate");
+    }
+  }
+
+  fetchExchangeRates();
+}, []);
 
   function applyPreset(selectedCountry) {
     setCountry(selectedCountry);
@@ -212,14 +250,29 @@ useEffect(() => {
         </div>
       </section>
 
-      <section className="card exchangeCard">
-        <h2>Exchange Rate</h2>
-        <p className="exchangeRate">{exchangeRateText}</p>
-        <p className="exchangeNote">
-          Estimated exchange rates for testing. Live rates can be added later.
-        </p>
-     
-      </section>
+<section className="card exchangeCard">
+  <h2>Exchange Rates</h2>
+
+  <p className="exchangeRate">
+    USD → CAD: {formatNumber(1 / exchangeRatesToUSD.CAD, 4)}
+  </p>
+
+  <p className="exchangeRate">
+    USD → MXN: {formatNumber(1 / exchangeRatesToUSD.MXN, 4)}
+  </p>
+
+  <p className="exchangeNote">
+    Last updated: {exchangeRateDate}
+  </p>
+
+  <p className="exchangeNote">
+    Last checked: {exchangeRateCheckedAt}
+  </p>
+
+  <p className="exchangeNote">
+    Source: {exchangeRateSource}
+  </p>
+</section>
 <section className="card adCard">
   <h2>Advertisement</h2>
   <p className="exchangeNote">
