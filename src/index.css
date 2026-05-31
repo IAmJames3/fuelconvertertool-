@@ -148,41 +148,42 @@ small {
   color: #111827;
   font-weight: 800;
   font-size: 18px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .result strong {
   display: block;
   color: #059669;
   font-size: 22px;
-  line-height: 1.25;
+  line-height: 1.2;
 }
 
 .resultComparison {
   display: grid;
-  gap: 8px;
+  gap: 10px;
+}
+
+.resultComparison div {
+  margin: 0;
+  padding: 0;
 }
 
 .resultComparison small {
   display: block;
   color: #6b7280;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 800;
-  margin-top: 0;
-  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 2px 0;
 }
 
 .resultComparison strong {
   display: block;
   color: #059669;
   font-size: 22px;
-  line-height: 1.1;
+  line-height: 1.15;
   margin: 0;
-}
-
-.resultComparison div {
-  margin: 0;
-  padding: 0;
 }
 
 .seoText {
