@@ -197,7 +197,76 @@ const results = useMemo(() => {
       ? "USD → USD: 1.00"
       : `${currency} → USD: ${exchangeRatesToUSD[currency]}`;
 
-  return (
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is Fuel Converter Tool?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Fuel Converter Tool helps drivers convert fuel purchases between the United States, Canada, and Mexico into the units and currency used by their preferred fuel-tracking app.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Why would I need Fuel Converter Tool?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "If you purchase fuel in another country, the measurements and currency shown on the pump may not match the format used by your fuel-tracking app. Fuel Converter Tool helps convert the information into the units and currency you need.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I use Fuel Converter Tool with Fuelly?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Fuel Converter Tool can help convert fuel purchases into the format expected by Fuelly.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I use Fuel Converter Tool with Fuelio, Drivvo, Simply Auto, or other fuel-tracking apps?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Fuel Converter Tool is designed to work with any fuel-tracking or mileage-tracking app that requires fuel purchases to be entered in a specific unit or currency format.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Does Fuel Converter Tool work for cars, trucks, RVs, and motorcycles?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Fuel Converter Tool can be used with any vehicle where fuel purchases are tracked, including cars, trucks, RVs, motorcycles, vans, and fleet vehicles.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Can I convert fuel prices between USD, CAD, and MXN?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Fuel Converter Tool uses live exchange rates when available to convert fuel prices and fuel purchase totals between U.S. Dollars, Canadian Dollars, and Mexican Pesos.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is Fuel Converter Tool free to use?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Fuel Converter Tool is free to use.",
+      },
+    },
+  ],
+};
+  
+return (
+  <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+    />
+
     <main className="page">
       <section className="hero">
         <h1>Fuel Converter Tool</h1>
@@ -501,9 +570,9 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
   <p>
     Yes. Fuel Converter Tool is free to use.
   </p>
-</section>
-
-</main>
+      </section>
+    </main>
+  </>
   );
 }
 
