@@ -519,9 +519,12 @@ function Result({ label, value }) {
 
       {displayValue ? (
         <strong>
+          <small>Original</small>
+          <br />
           {displayValue[0].trim()}
           <br />
-          =
+          <br />
+          <small>Use in Tracking App</small>
           <br />
           {displayValue[1].trim()}
         </strong>
