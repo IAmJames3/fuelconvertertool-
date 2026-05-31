@@ -517,19 +517,18 @@ function Result({ label, value }) {
     <div className="result">
       <span>{label}</span>
 
-      {displayValue ? (
-        <strong>
-          <small>Original</small>
-          <br />
-          {displayValue[0].trim()}
-          <br />
-          <small>Use in Tracking App</small>
-          <br />
-          {displayValue[1].trim()}
-        </strong>
-      ) : (
-        <strong>{value}</strong>
-      )}
+{displayValue ? (
+  <div className="resultComparison">
+    <div>
+      <small>Original</small>
+      <strong>{displayValue[0].trim()}</strong>
     </div>
-  );
-}
+
+    <div>
+      <small>Use in Tracking App</small>
+      <strong>{displayValue[1].trim()}</strong>
+    </div>
+  </div>
+) : (
+  <strong>{value}</strong>
+)}
