@@ -160,7 +160,7 @@ small {
 
 .resultComparison {
   display: grid;
-  gap: 12px;
+  gap: 8px;
 }
 
 .resultComparison small {
@@ -171,11 +171,26 @@ small {
   margin-bottom: 3px;
 }
 
+.resultComparison small {
+  display: block;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 800;
+  margin-top: 0;
+  margin-bottom: 3px;
+}
+
 .resultComparison strong {
   display: block;
   color: #059669;
   font-size: 22px;
-  line-height: 1.2;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.resultComparison div {
+  margin: 0;
+  padding: 0;
 }
 
 .seoText {
