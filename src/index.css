@@ -145,9 +145,10 @@ small {
 
 .result span {
   display: block;
-  color: #6b7280;
-  font-weight: 700;
-  margin-bottom: 4px;
+  color: #111827;
+  font-weight: 800;
+  font-size: 18px;
+  margin-bottom: 8px;
 }
 
 .result strong {
@@ -155,6 +156,14 @@ small {
   color: #059669;
   font-size: 22px;
   line-height: 1.25;
+}
+
+.result strong small {
+  display: block;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
 }
 
 .seoText {
