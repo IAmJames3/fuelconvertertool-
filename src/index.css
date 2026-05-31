@@ -168,14 +168,6 @@ small {
   color: #6b7280;
   font-size: 14px;
   font-weight: 800;
-  margin-bottom: 3px;
-}
-
-.resultComparison small {
-  display: block;
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 800;
   margin-top: 0;
   margin-bottom: 3px;
 }
