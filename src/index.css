@@ -158,12 +158,24 @@ small {
   line-height: 1.25;
 }
 
-.result strong small {
+.resultComparison {
+  display: grid;
+  gap: 12px;
+}
+
+.resultComparison small {
   display: block;
   color: #6b7280;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 2px;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 3px;
+}
+
+.resultComparison strong {
+  display: block;
+  color: #059669;
+  font-size: 22px;
+  line-height: 1.2;
 }
 
 .seoText {
