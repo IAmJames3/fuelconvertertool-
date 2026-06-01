@@ -581,7 +581,6 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
   <small>© 2026 Fuel Converter Tool</small>
 </footer>
     </main>
-    </main>
   </>
   );
 }
