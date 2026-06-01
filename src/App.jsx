@@ -571,8 +571,14 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
     Yes. Fuel Converter Tool is free to use.
   </p>
       </section>
-      <footer className="footer">
-  <a href="/privacy-policy.html">Privacy Policy</a>
+    <footer className="footer">
+  <div>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    {" | "}
+    <a href="mailto:fuelconvertertool@gmail.com">Contact</a>
+  </div>
+
+  <small>© 2026 Fuel Converter Tool</small>
 </footer>
     </main>
     </main>
