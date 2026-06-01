@@ -215,6 +215,11 @@ small {
   text-align: center;
   margin: 20px 0;
   font-size: 14px;
+  color: #6b7280;
+}
+
+.footer div {
+  margin-bottom: 8px;
 }
 
 .footer a {
@@ -224,4 +229,10 @@ small {
 
 .footer a:hover {
   text-decoration: underline;
+}
+
+.footer small {
+  display: block;
+  margin-top: 0;
+  color: #9ca3af;
 }
