@@ -575,6 +575,7 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
   <a href="/privacy-policy.html">Privacy Policy</a>
 </footer>
     </main>
+    </main>
   </>
   );
 }
