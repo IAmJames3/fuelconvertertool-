@@ -211,3 +211,17 @@ small {
 .adCard h2 {
   margin-bottom: 8px;
 }
+.footer {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+.footer a {
+  color: #6b7280;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
