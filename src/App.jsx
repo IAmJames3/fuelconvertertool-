@@ -574,7 +574,7 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
 <footer className="footer">
   <div>
     <a href="/how-to-record-fuel-purchases-across-borders.html">
-      How-To Guide
+      Cross-Border Fuel Guide
     </a>
     {" | "}
     <a href="/privacy-policy.html">
