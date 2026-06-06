@@ -581,6 +581,10 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
       Gallons vs Liters Guide
     </a>
     {" | "}
+    <a href="/why-i-built-fuel-converter-tool.html">
+      Why I Built This
+    </a>
+    {" | "}
     <a href="/privacy-policy.html">
       Privacy Policy
     </a>
