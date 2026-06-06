@@ -577,6 +577,10 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
       Cross-Border Fuel Guide
     </a>
     {" | "}
+    <a href="/gallons-vs-liters-for-fuel-tracking-apps.html">
+      Gallons vs Liters Guide
+    </a>
+    {" | "}
     <a href="/privacy-policy.html">
       Privacy Policy
     </a>
