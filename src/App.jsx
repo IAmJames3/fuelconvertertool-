@@ -323,6 +323,8 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
           <div className="inputRow">
             <input
               type="number"
+              inputMode="decimal"
+              step="any"
               value={odometer}
               onChange={(e) => setOdometer(e.target.value)}
             />
@@ -341,6 +343,8 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
           <div className="inputRow">
             <input
               type="number"
+              inputMode="decimal"
+              step="any"
               value={pricePerUnit}
               onChange={(e) => setPricePerUnit(e.target.value)}
             />
@@ -360,6 +364,8 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
           <div className="inputRow">
             <input
               type="number"
+              inputMode="decimal"
+              step="any"
               value={fuelAmount}
               onChange={(e) => setFuelAmount(e.target.value)}
             />
