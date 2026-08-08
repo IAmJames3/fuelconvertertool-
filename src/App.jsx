@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 
+import {
+  fallbackExchangeRatesToUSD,
+  loadSavedExchangeRates,
+  ratesFromFrankfurter,
+  saveExchangeRates,
+} from "./exchangeRates";
+
 const presets = {
   US: { distanceUnit: "miles", fuelUnit: "gallons", currency: "USD" },
   Canada: { distanceUnit: "km", fuelUnit: "liters", currency: "CAD" },
   Mexico: { distanceUnit: "km", fuelUnit: "liters", currency: "MXN" },
-};
-
-const fallbackExchangeRatesToUSD = {
-  USD: 1,
-  CAD: 0.72,
-  MXN: 0.059,
 };
 
 function toMiles(value, unit) {
@@ -44,6 +45,7 @@ function formatCurrency(value, currency) {
 }
 
 export default function App() {
+const savedExchangeRates = loadSavedExchangeRates();
 const savedForm =
   JSON.parse(localStorage.getItem("fuelConverterForm")) || {};
 
@@ -67,13 +69,23 @@ const [fuelUnit, setFuelUnit] = useState(
 );
   
 const [exchangeRatesToUSD, setExchangeRatesToUSD] = useState(
-  fallbackExchangeRatesToUSD
+  savedExchangeRates?.rates || fallbackExchangeRatesToUSD
 );
-const [exchangeRateDate, setExchangeRateDate] = useState("Checking...");
-const [exchangeRateCheckedAt, setExchangeRateCheckedAt] = useState("");
+const [exchangeRateDate, setExchangeRateDate] = useState(
+  savedExchangeRates?.date || "Checking..."
+);
+const [exchangeRateCheckedAt, setExchangeRateCheckedAt] = useState(
+  savedExchangeRates?.checkedAt
+    ? new Date(savedExchangeRates.checkedAt).toLocaleString()
+    : ""
+);
 const [exchangeRateSource, setExchangeRateSource] = useState(
-  "Frankfurter Exchange Rates"
+  savedExchangeRates ? "Saved exchange rates" : "Frankfurter Exchange Rates"
 );
+const [exchangeRateStatus, setExchangeRateStatus] = useState(
+  "checking"
+);
+const [isOnline, setIsOnline] = useState(navigator.onLine);
 useEffect(() => {
 const formData = {
   country,
@@ -100,6 +112,8 @@ const formData = {
 
 useEffect(() => {
   async function fetchExchangeRates() {
+    setIsOnline(navigator.onLine);
+
     try {
       const response = await fetch(
         "https://api.frankfurter.dev/v1/latest?base=USD&symbols=CAD,MXN"
@@ -109,26 +123,51 @@ useEffect(() => {
         throw new Error("Exchange rate request failed");
       }
 
-      const data = await response.json();
+      const record = ratesFromFrankfurter(await response.json());
+      saveExchangeRates(record);
 
-      setExchangeRatesToUSD({
-        USD: 1,
-        CAD: 1 / data.rates.CAD,
-        MXN: 1 / data.rates.MXN,
-      });
-
-      setExchangeRateDate(data.date);
-      setExchangeRateCheckedAt(new Date().toLocaleString());
+      setExchangeRatesToUSD(record.rates);
+      setExchangeRateDate(record.date);
+      setExchangeRateCheckedAt(new Date(record.checkedAt).toLocaleString());
       setExchangeRateSource("Frankfurter Exchange Rates");
+      setExchangeRateStatus("live");
     } catch (error) {
-      setExchangeRatesToUSD(fallbackExchangeRatesToUSD);
-      setExchangeRateDate("Using fallback rates");
-      setExchangeRateCheckedAt(new Date().toLocaleString());
-      setExchangeRateSource("Fallback estimate");
+      const saved = loadSavedExchangeRates();
+
+      if (saved) {
+        setExchangeRatesToUSD(saved.rates);
+        setExchangeRateDate(saved.date);
+        setExchangeRateCheckedAt(new Date(saved.checkedAt).toLocaleString());
+        setExchangeRateSource("Saved exchange rates");
+        setExchangeRateStatus("saved");
+      } else {
+        setExchangeRatesToUSD(fallbackExchangeRatesToUSD);
+        setExchangeRateDate("Unavailable");
+        setExchangeRateCheckedAt(new Date().toLocaleString());
+        setExchangeRateSource("Fallback estimate");
+        setExchangeRateStatus("fallback");
+      }
     }
   }
 
+  function handleOffline() {
+    setIsOnline(false);
+  }
+
+  function handleOnline() {
+    setIsOnline(true);
+    fetchExchangeRates();
+  }
+
   fetchExchangeRates();
+
+  window.addEventListener("offline", handleOffline);
+  window.addEventListener("online", handleOnline);
+
+  return () => {
+    window.removeEventListener("offline", handleOffline);
+    window.removeEventListener("online", handleOnline);
+  };
 }, []);
 
   function applyPreset(selectedCountry) {
@@ -383,6 +422,22 @@ Convert fuel purchases between the United States, Canada, and Mexico into the un
 
 <section className="card exchangeCard">
   <h2>Exchange Rates</h2>
+
+  {exchangeRateStatus === "saved" && (
+    <p className="rateStatus savedRateStatus" role="status">
+      {isOnline
+        ? "Live update unavailable. Using your most recently saved exchange rates."
+        : "You’re offline. Using your most recently saved exchange rates."}
+    </p>
+  )}
+
+  {exchangeRateStatus === "fallback" && (
+    <p className="rateStatus fallbackRateStatus" role="status">
+      {isOnline
+        ? "Live rates are temporarily unavailable. Using fallback estimates."
+        : "You’re offline and no saved rates are available. Using fallback estimates."}
+    </p>
+  )}
 
   <p className="exchangeNote">
     Live exchange rates are used for USD, CAD, and MXN conversions.

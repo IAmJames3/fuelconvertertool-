@@ -211,6 +211,26 @@ small {
 .adCard h2 {
   margin-bottom: 8px;
 }
+
+.rateStatus {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.savedRateStatus {
+  color: #1e3a8a;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.fallbackRateStatus {
+  color: #92400e;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+}
 .footer {
   text-align: center;
   margin: 20px 0;
